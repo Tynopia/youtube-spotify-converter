@@ -1,12 +1,12 @@
-youtube-spotify-converter
+canvas
 =================
 
 This cli converts youtube videos to 9:16 spotify videos
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/youtube-spotify-converter.svg)](https://npmjs.org/package/youtube-spotify-converter)
-[![Downloads/week](https://img.shields.io/npm/dw/youtube-spotify-converter.svg)](https://npmjs.org/package/youtube-spotify-converter)
+[![Version](https://img.shields.io/npm/v/canvas.svg)](https://npmjs.org/package/canvas)
+[![Downloads/week](https://img.shields.io/npm/dw/canvas.svg)](https://npmjs.org/package/canvas)
 
 
 <!-- toc -->
@@ -16,28 +16,28 @@ This cli converts youtube videos to 9:16 spotify videos
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g youtube-spotify-converter
-$ youtube-spotify-converter COMMAND
+$ npm install -g canvas
+$ canvas COMMAND
 running command...
-$ youtube-spotify-converter (--version)
-youtube-spotify-converter/0.0.0 win32-x64 node-v22.11.0
-$ youtube-spotify-converter --help [COMMAND]
+$ canvas (--version)
+canvas/0.0.0 win32-x64 node-v22.11.0
+$ canvas --help [COMMAND]
 USAGE
-  $ youtube-spotify-converter COMMAND
+  $ canvas COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`youtube-spotify-converter`](#youtube-spotify-converter)
+* [`canvas`](#canvas)
 
-## `youtube-spotify-converter`
+## `canvas`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ youtube-spotify-converter  [-h] [-v]
+  $ canvas  [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
