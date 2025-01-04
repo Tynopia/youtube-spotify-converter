@@ -89,7 +89,7 @@ export default class Convert extends Command {
                 type: "number",
                 name: "duration",
                 message: "How long should the video be?",
-                default: 10,
+                default: 7,
                 required: true
             }
         ])
@@ -110,17 +110,18 @@ export default class Convert extends Command {
             .outputOptions([
                 "-vf",
                 `crop=in_h*9/16:in_h:(in_w-out_w)/2:0,scale=${this.calculateScale(1080, scale)}:${this.calculateScale(1920, scale)},crop=1080:1920:(in_w-out_w)/2:(in_h-out_h)/2`,
+                "-aspect", "9:16",
                 `-ss ${start}`,
                 `-t ${this.formatDuration(duration)}`
             ])
-            .save(`output-${info.videoDetails.videoId}.mp4`)
+            .save(`${info.videoDetails.title}.mp4`)
     }
 
     private formatDuration(duration: number) {
         const seconds = duration % 60;
         const minutes = Math.floor(duration / 60);
 
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
     }
 
     private calculateScale(value: number, scale: number) {

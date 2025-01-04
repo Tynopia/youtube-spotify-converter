@@ -29,21 +29,23 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`canvas`](#canvas)
+* [`canvas [COMMAND]`](#canvas-command)
 
-## `canvas`
+## `canvas [COMMAND]`
 
-Update installed plugins.
+Display help for canvas.
 
 ```
 USAGE
-  $ canvas  [-h] [-v]
+  $ canvas  [COMMAND...] [-n]
+
+ARGUMENTS
+  COMMAND...  Command to show help for.
 
 FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
+  -n, --nested-commands  Include all nested commands in the output.
 
 DESCRIPTION
-  Update installed plugins.
+  Display help for canvas.
 ```
 <!-- commandsstop -->
