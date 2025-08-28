@@ -1,9 +1,11 @@
+import { Innertube, UniversalCache } from "youtubei.js";
 import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg";
+import { Readable } from "stream";
 import { Command } from "@oclif/core"
 
 import inquirer from "inquirer";
 import ffmpeg from "fluent-ffmpeg";
-import ytdl from "@distube/ytdl-core"
+import ytdl from "@distube/ytdl-core";
 import ora from "ora";
 
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -12,7 +14,9 @@ export default class Convert extends Command {
     static description = "Convert a YouTube Video to a 9:16 Spotify Canvas Video"
 
     async run(): Promise<void> {
-        process.env.YTDL_NO_UPDATE = "1"
+        const yt = await Innertube.create({
+            cache: new UniversalCache(false)
+        });
 
         const { url } = await inquirer.prompt([
             {
@@ -26,22 +30,10 @@ export default class Convert extends Command {
             }
         ])
 
+        const videoId = ytdl.getVideoID(url)
         const info = await ytdl.getInfo(url);
 
-        const { format, scale, start, duration } = await inquirer.prompt([
-            {
-                type: "list",
-                name: "format",
-                message: "What quality do you want to download?",
-                choices: info.formats
-                    .filter(format => format.container === "mp4" && format.hasVideo)
-                    .map(format => {
-                        return {
-                            name: `${format.qualityLabel} ${format.fps ? `- ${format.fps} fps` : ""}`,
-                            value: format
-                        }
-                    })
-            },
+        const { scale, start, duration } = await inquirer.prompt([
             {
                 type: "number",
                 name: "scale",
@@ -96,11 +88,23 @@ export default class Convert extends Command {
 
         const spinner = ora("Downloading and converting video")
 
-        const video = ytdl(url, {
-            format
+        const format = await yt.getStreamingData(videoId, {
+            quality: "best",
+            type: "video",
+            client: "TV"
         })
 
-        ffmpeg(video)
+        console.log(format)
+
+        const video = await yt.download(videoId, {
+            quality: "best",
+            type: "video",
+            client: "TV"
+        })
+
+        const nodeStream = this.webStreamToNode(video);
+
+        ffmpeg(nodeStream)
             .on("start", function () {
                 spinner.start()
             })
@@ -126,5 +130,19 @@ export default class Convert extends Command {
 
     private calculateScale(value: number, scale: number) {
         return Math.floor(value * ((100 + scale) / 100))
+    }
+
+    private webStreamToNode(stream: ReadableStream<Uint8Array>) {
+        const reader = stream.getReader();
+        return new Readable({
+            async read() {
+                const { done, value } = await reader.read();
+                if (done) {
+                    this.push(null);
+                } else {
+                    this.push(Buffer.from(value));
+                }
+            }
+        });
     }
 }
