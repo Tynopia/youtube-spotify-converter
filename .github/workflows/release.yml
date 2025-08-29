@@ -2,36 +2,53 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
   release:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Install Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install NSIS
+      - name: Install NSIS (for Windows installer)
         run: choco install nsis -y
 
-      # Build oclif Windows executable
-      - name: Build CLI
+      - name: Install MSYS2 (with GNU tar)
+        run: choco install msys2 -y
+
+      - name: Install GNU tar inside MSYS2
+        shell: powershell
+        run: |
+          C:\tools\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
+          C:\tools\msys64\usr\bin\bash -lc "pacman -S --noconfirm tar"
+          echo "C:\tools\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          tar --version
+
+      - name: Install oclif
+        run: npm install -g oclif
+
+      - name: Build
         run: |
           npm run build
           npx oclif pack win
 
-      # semantic-release für Version + Upload
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release

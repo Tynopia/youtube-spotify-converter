@@ -44,7 +44,7 @@
     "/dist",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/Tynopia/canvas",
+  "homepage": "https://github.com/Tynopia/youtube-spotify-converter",
   "keywords": [
     "oclif"
   ],
@@ -64,7 +64,7 @@
     ],
     "topicSeparator": " "
   },
-  "repository": "Tynopia/canvas",
+  "repository": "Tynopia/youtube-spotify-converter",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint . --ext .ts",
