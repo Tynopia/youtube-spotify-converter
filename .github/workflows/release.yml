@@ -27,10 +27,14 @@ jobs:
         run: npm ci
 
       - name: Install NSIS (for Windows installer)
-        run: choco install nsis -y
+        run: |
+          choco install nsis -y
+          echo "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install MSYS2 (with GNU tar)
-        run: choco install msys2 -y
+        run: |
+          makensis /VERSION
+          choco install msys2 -y
 
       - name: Install GNU tar inside MSYS2
         shell: powershell

@@ -54,10 +54,7 @@
   "oclif": {
     "bin": "canvas",
     "dirname": "canvas",
-    "commands": {
-      "strategy": "single",
-      "target": "./dist/index.js"
-    },
+    "commands": "./dist/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
